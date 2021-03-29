@@ -1,11 +1,10 @@
 import java.time.LocalDate;
 
 public class Client {
-    private LocalDate dateOfBirthday;
     private String firstName;
     private String lastName;
     private String pesel;
-    private String accountType;
+    private LocalDate dateOfBirthday;
 
 
     public Client(String firstName, String lastName, String pesel, String dateOfBirthday) {
@@ -13,6 +12,9 @@ public class Client {
         this.lastName = lastName;
         this.pesel = pesel;
         this.dateOfBirthday = LocalDate.parse(dateOfBirthday);
+
+        String insertSql = "INSERT INTO Accounts (Account_Number, Account_Balance, Credit_Card, ClientID) VALUES "
+                + "(" + firstName + "," +   lastName + "," + pesel + "," + dateOfBirthday + ");";
 
     }
 
