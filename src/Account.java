@@ -1,4 +1,7 @@
+import java.sql.*;
+
 public class Account extends Client {
+
     private Client client;
     private String accountNumber;
     private int accountBalance;
@@ -8,10 +11,42 @@ public class Account extends Client {
 
     public Account(Client client, boolean creditCard) {
         this.client = client;
-        this.accountNumber = randomAccountNumber.getNumberAccount();
+        this.accountNumber = randomAccountNumber.getRandomNumberAccount();
         this.accountBalance = 0;
         this.creditCard = creditCard;
+
+        String connectionUrl =
+                "jdbc:sqlserver://localhost;"
+                        + "database=Bank;"
+                        + "user=BartekSQL;"
+                        + "password=SQLserver123;"
+                        + "encrypt=true;"
+                        + "trustServerCertificate=true;"
+                        + "loginTimeout=30;";
+        String insertSql = "" +
+                "INSERT INTO Accounts (Account_Number, Account_Balance, Credit_Card, ClientID) VALUES "
+                + "(getAccountNumber() + getAccountBalance() + isCreditCard() + getClient());";
+
+        ResultSet resultSet = null;
+
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+             PreparedStatement prepsInsertProduct = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);) {
+
+            prepsInsertProduct.execute();
+            // Retrieve the generated key from the insert.
+            resultSet = prepsInsertProduct.getGeneratedKeys();
+
+            // Print the ID of the inserted row.
+            while (resultSet.next()) {
+                System.out.println("Generated: " + resultSet.getString(1));
+            }
+        }
+        // Handle any errors that may have occurred.
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     public Client getClient() {
         return client;

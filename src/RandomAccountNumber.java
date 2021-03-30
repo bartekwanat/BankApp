@@ -5,7 +5,7 @@ public class RandomAccountNumber {
 
     private String numberAccount = "";
 
-    public String getNumberAccount() {
+    public String getRandomNumberAccount() {
 
             for (int i = 0; i <= 23; i++) {
                 Random random = new Random();
