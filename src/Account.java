@@ -1,4 +1,4 @@
-import java.sql.*;
+import java.sql.Connection;
 
 public class Account extends Client {
 
@@ -6,7 +6,7 @@ public class Account extends Client {
     private String accountNumber;
     private int accountBalance;
     private boolean creditCard;
-    private RandomAccountNumber randomAccountNumber = new RandomAccountNumber();
+    private final RandomAccountNumber randomAccountNumber = new RandomAccountNumber();
 
 
     public Account(Client client, boolean creditCard) {
@@ -15,36 +15,17 @@ public class Account extends Client {
         this.accountBalance = 0;
         this.creditCard = creditCard;
 
-        String connectionUrl =
-                "jdbc:sqlserver://localhost;"
-                        + "database=Bank;"
-                        + "user=BartekSQL;"
-                        + "password=SQLserver123;"
-                        + "encrypt=true;"
-                        + "trustServerCertificate=true;"
-                        + "loginTimeout=30;";
-        String insertSql = "" +
+        int parseCreditCard;
+        if (creditCard) {
+            parseCreditCard = 1;
+        } else parseCreditCard = 0;
+
+        String insertSQL = "" +
                 "INSERT INTO Accounts (Account_Number, Account_Balance, Credit_Card, ClientID) VALUES "
-                + "(getAccountNumber() + getAccountBalance() + isCreditCard() + getClient());";
+                + "(" + this.accountNumber + ", " + this.accountBalance + ", " + parseCreditCard + ", " + 1 + ");";
 
-        ResultSet resultSet = null;
+       SQLDatabaseConnection.getConnection(insertSQL);
 
-        try (Connection connection = DriverManager.getConnection(connectionUrl);
-             PreparedStatement prepsInsertProduct = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);) {
-
-            prepsInsertProduct.execute();
-            // Retrieve the generated key from the insert.
-            resultSet = prepsInsertProduct.getGeneratedKeys();
-
-            // Print the ID of the inserted row.
-            while (resultSet.next()) {
-                System.out.println("Generated: " + resultSet.getString(1));
-            }
-        }
-        // Handle any errors that may have occurred.
-        catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -63,7 +44,6 @@ public class Account extends Client {
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
-
 
     public int getAccountBalance() {
         return accountBalance;
