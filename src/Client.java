@@ -1,4 +1,6 @@
+import java.sql.SQLException;
 import java.time.LocalDate;
+
 
 public class Client {
     private String firstName;
@@ -7,15 +9,18 @@ public class Client {
     private LocalDate dateOfBirthday;
 
 
-    public Client(String firstName, String lastName, String pesel, String dateOfBirthday) {
+    public Client(String firstName, String lastName, String pesel, String dateOfBirthday) throws SQLException, ClassNotFoundException {
         this.firstName = firstName;
         this.lastName = lastName;
         this.pesel = pesel;
         this.dateOfBirthday = LocalDate.parse(dateOfBirthday);
 
-        String insertSql = "INSERT INTO Accounts (Account_Number, Account_Balance, Credit_Card, ClientID) VALUES "
-                + "(" + firstName + "," +   lastName + "," + pesel + "," + dateOfBirthday + ");";
 
+        String insertSql = "INSERT INTO Clients (First_Name, Last_Name, PESEL, Date_of_Birthday) VALUES "
+                + "('" + this.firstName + "' , '" + this.lastName + "' , '" + this.pesel + "' , '" + this.dateOfBirthday  + "')";
+
+
+        SQLDatabaseConnection.addData(insertSql);
     }
 
     public Client() {

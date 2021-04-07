@@ -1,15 +1,15 @@
-import java.sql.Connection;
+import java.sql.SQLException;
 
 public class Account extends Client {
 
     private Client client;
     private String accountNumber;
-    private int accountBalance;
+    private double accountBalance;
     private boolean creditCard;
     private final RandomAccountNumber randomAccountNumber = new RandomAccountNumber();
 
 
-    public Account(Client client, boolean creditCard) {
+    public Account(Client client, boolean creditCard) throws SQLException, ClassNotFoundException {
         this.client = client;
         this.accountNumber = randomAccountNumber.getRandomNumberAccount();
         this.accountBalance = 0;
@@ -20,14 +20,14 @@ public class Account extends Client {
             parseCreditCard = 1;
         } else parseCreditCard = 0;
 
+        int clientID = SQLDatabaseConnection.getID(client.getPesel());
+
         String insertSQL = "" +
                 "INSERT INTO Accounts (Account_Number, Account_Balance, Credit_Card, ClientID) VALUES "
-                + "(" + this.accountNumber + ", " + this.accountBalance + ", " + parseCreditCard + ", " + 1 + ");";
+                + "(" + this.accountNumber + ", " + this.accountBalance + ", " + parseCreditCard + ", " + clientID  + ");";
 
-       SQLDatabaseConnection.getConnection(insertSQL);
-
+        SQLDatabaseConnection.addData(insertSQL);
     }
-
 
     public Client getClient() {
         return client;
@@ -45,11 +45,11 @@ public class Account extends Client {
         this.accountNumber = accountNumber;
     }
 
-    public int getAccountBalance() {
+    public double getAccountBalance() {
         return accountBalance;
     }
 
-    public void setAccountBalance(int accountBalance) {
+    public void setAccountBalance(double accountBalance) {
         this.accountBalance = accountBalance;
     }
 
