@@ -1,4 +1,4 @@
-package Factory;
+package Models;
 
 import Utils.SQLDatabaseOperations;
 

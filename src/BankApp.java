@@ -1,5 +1,5 @@
-import Factory.Account;
-import Factory.Client;
+import Models.Account;
+import Models.Client;
 import Utils.SQLDatabaseOperations;
 
 import java.sql.*;

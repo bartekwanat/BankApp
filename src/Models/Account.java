@@ -1,6 +1,5 @@
-package Factory;
+package Models;
 
-import Factory.Client;
 import Helpers.RandomAccountNumber;
 import Utils.SQLDatabaseOperations;
 
