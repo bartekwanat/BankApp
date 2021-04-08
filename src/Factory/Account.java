@@ -1,3 +1,9 @@
+package Factory;
+
+import Factory.Client;
+import Helpers.RandomAccountNumber;
+import Utils.SQLDatabaseOperations;
+
 import java.sql.SQLException;
 
 public class Account extends Client {
@@ -10,24 +16,27 @@ public class Account extends Client {
 
 
     public Account(Client client, boolean creditCard) throws SQLException, ClassNotFoundException {
-        this.client = client;
-        this.accountNumber = randomAccountNumber.getRandomNumberAccount();
-        this.accountBalance = 0;
-        this.creditCard = creditCard;
 
-        int parseCreditCard;
-        if (creditCard) {
-            parseCreditCard = 1;
-        } else parseCreditCard = 0;
 
-        int clientID = SQLDatabaseConnection.getID(client.getPesel());
+            this.client = client;
+            this.accountNumber = randomAccountNumber.getRandomNumberAccount();
+            this.accountBalance = 0;
+            this.creditCard = creditCard;
 
-        String insertSQL = "" +
-                "INSERT INTO Accounts (Account_Number, Account_Balance, Credit_Card, ClientID) VALUES "
-                + "(" + this.accountNumber + ", " + this.accountBalance + ", " + parseCreditCard + ", " + clientID  + ");";
+            int parseCreditCard;
+            if (creditCard) {
+                parseCreditCard = 1;
+            } else parseCreditCard = 0;
 
-        SQLDatabaseConnection.addData(insertSQL);
-    }
+            int clientID = SQLDatabaseOperations.getID(client.getPesel());
+
+            String insertSQL = "" +
+                    "INSERT INTO Accounts (Account_Number, Account_Balance, Credit_Card, ClientID) VALUES "
+                    + "(" + this.accountNumber + ", " + this.accountBalance + ", " + parseCreditCard + ", " + clientID + ");";
+
+            SQLDatabaseOperations.addData(insertSQL);
+        }
+
 
     public Client getClient() {
         return client;
@@ -68,7 +77,7 @@ public class Account extends Client {
 
     @Override
     public String toString() {
-        return "Account: " + '\n' +
+        return "Factory.Account: " + '\n' +
                 "Owner: " + client.getFirstName() + " " + client.getLastName() + '\n' +
                 "Number: " + getAccountNumber() + '\n' +
                 "Balance: " + getAccountBalance() + "$" + '\n' +
